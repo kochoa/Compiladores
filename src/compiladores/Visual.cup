@@ -1,7 +1,6 @@
 import java_cup.runtime.*;
 import java_cup.runtime.Scanner;
-
-//import java.util.ArrayList;
+import java.util.ArrayList;
 
 
 /* Preliminaries to set up and use the scanner.  */
@@ -11,7 +10,7 @@ scan with {: return super.getScanner().next_token(); :};
 
 parser code{:
         
-       // ArrayList<Visual_Errores> erroresdesintaxis = new ArrayList<Visual_Errores>();
+       // ArrayList<VisualErrores> erroresdesintaxis = new ArrayList<VisualErrores>();
 
 	public void syntax_error(Symbol cur_token) {
         report_error("Sytax error at line " + (cur_token.left+1) +", column " + cur_token.right, null);
@@ -29,31 +28,44 @@ public void unrecovered_syntax_error(Symbol cur_token) throws
 terminal Suma, Resta, Mult, Div;
 terminal As, Dim, Funtion;
 terminal Char, Double, Float, Integer, String, Boolean, Entero, Ch;
-terminal If, Do, While, For, Then, To, Else, End, EndIf, EndWhile, EndFor, Loop, Next;
+terminal If, Do, While, For, Then, Select, Case, To, Else, End, EndIf, EndWhile, EndFor, EndSelect, Loop, Next, Exit, ExitFor;
 terminal Structs, Sub, Private, Print;
 terminal ParIzq, ParDer;
-terminal Menor, Mayor, Distinto, Potencia, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, DiviEntera;
+terminal Menor, Mayor, Distinto, Potencia, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, DiviEntera, Not, And, Or, Xor, Eqv, Imp;
 terminal EndLine, Id, DosPuntos, Concatenacion, Coma;
 terminal Asignacion, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function;
 
-
-
-
 /*-* Non-non terminal symbols **/
-non terminal  expr;
-non terminal ini;
+non terminal  expr, ini, exp, var_selec, pal_reser, dec_var, dec_var_more, tipo_reser;
 
 /* precedence */
 precedence left Suma, Resta;
 precedence left Mult, Div;
 
+//start with ini;
 
-
-start with ini;
-
-//ini ::=
+//ini ::= 
 
 /*-*
  * GRAMMAR RULES
  */
 expr         ::= If   ;
+
+dec_var               ::=Dim var_selec As tipo_reser  //tendira que ir el
+                         |Dim var_selec As tipo_reser Coma dec_var_more
+                      
+dec_var_more          ::=var_selec As tipo_reser;
+                       //  |var_selec As tipo_reser;
+
+       
+ var_selec            ::=Id
+                         |Ch;
+
+ tipo_reser           ::=Char
+                         |Double
+                         |Float
+                         |Integer
+                         |String
+                         |Boolean;
+                       
+

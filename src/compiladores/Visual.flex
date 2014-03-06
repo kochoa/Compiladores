@@ -22,68 +22,80 @@ import java_cup.runtime.*;
 	st = "";
 %init}
 
-as 			= As
-boolean			= Boolean
-char			= Char
-dim 			= Dim
-do 			= Do
-double			= Double
-end			= End
-endif			= End {space}* If
-endwhile		= End {space}* While
-endfor			= End {space}* For
-else 			= Else
-for 			= For
-float			= Float
-function		= Function
-if 			= If
-integer			= Integer
-loop			= Loop
-next 			= Next
-structs			= Structs
-string			= String
-sub			= Sub
-then 			= Then
-to 			= To
+as 			= As  //ya
+boolean			= Boolean //ya
+char			= Char //ya
+dim 			= Dim //ya
+do 			= Do  //ya
+double			= Double //ya
+end			= End //ya
+endif			= End {space}+ If //ya
+endwhile		= End {space}+ While  //ya
+endfor			= End {space}+ For //ya
+endselect               = End {space}+ Select //ya
+else 			= Else //ya
+case                    = Case //ya
+select                  = Select //ya
+for 			= For //ya
+float			= Float //ya
+function		= Function //ya
+if 			= If //ya
+integer			= Integer //ya
+loop			= Loop //ya
+next 			= Next //ya
+structs			= Structs //ya
+string			= String //ya
+sub			= Sub //ya
+then 			= Then //ya
+to 			= To //ya
 while 			= While
-private			= Private
-print			= Print
+private			= Private //ya
+print			= Print //ya
+no                      = Not //ya
+and                     = And //ya
+orinc                   = Or //ya
+orexc                   = Xor //ya
+Equivalencia            = Eqv //ya
+Implicacion             = Imp //ya
+exitfor                 = Exit {space}* For //ya
+exit                    = Exit //ya
+
 
 letra			=[a-zA-Z]
-//cadena		={comillas}{space}*}({letra}*|{space}*)
 
-asigna			= \=
-tipobool 		= true | false
-endline 		= ([\n\r])+
+
+asigna			= \= //ya
+tipobool 		= true | false //ya
+endline 		= ([\n\r])+ //ya
 int 			= [0-9]
-entero			= {int}+
-id			= {letra}({guionbajo}?{letra}?{int}?)*
-ch 			= "{letra}" 
-dospuntos		= \:
-coma 			= \,
-menor			= \<
-mayor			= \>
-distinto 		= <\>
-potencia	 	= \^
-menorigual		= <\=
-mayorigual		= >\=
-concatenacion   	= \&
-comillas		= \"
+entero			= {int}+ //ya
+id			= {letra}({guionbajo}?{letra}?{int}?)* //ya
+ch 			= "{letra}"  //ya
+dospuntos		= \: //ya
+coma 			= \, //ya
+menor			= \< //ya
+mayor			= \> //ya
+distinto 		= <\> //ya
+potencia	 	= \^ //ya
+menorigual		= <\= //ya
+mayorigual		= >\= //ya
+concatenacion   	= \& //ya
+comillas		= \" //ya
 igcomillas		= \\{comillas}
-space 			= [ ]
-tab			= \t
-menos			= \-
-mas			= \+
-por			= \*
-entre			= \/
-divientera		= \\
-parizq			= \(
-parder			= \)
-guionbajo		= \_
-llavesder		= \{
-llavesizq		= \}
+space 			= [ ] //ya
+tab			= \t //ya
+menos			= \- //ya
+mas			= \+ //ya
+por			= \* //ya
+entre			= \/ //ya
+divientera		= \\ //ya
+parizq			= \( //ya
+parder			= \) //ya
+guionbajo		= \_ //ya
+llavesder		= \{ //ya
+llavesizq		= \} //ya
 
-comentario		= \'
+comentario		= \' //ya
 
 %%
 
@@ -95,9 +107,12 @@ comentario		= \'
 	{endif}			{return symbol(sym.EndIf);}
 	{endwhile}		{return symbol(sym.EndWhile);}
 	{endfor}		{return symbol(sym.EndFor);}
+        {endselect}             {return symbol(sym.EndSelect);}
 	{while}			{return symbol(sym.While);}
 	{for}			{return symbol(sym.For);}
 	{else}			{return symbol(sym.Else);}
+        {case}                  {return symbol(sym.Case);}
+        {select}                {return symbol(sym.Select);}
 	{then}			{return symbol(sym.Then);}
 	{as}			{return symbol(sym.As);}
 	{to}			{return symbol(sym.To);}
@@ -114,8 +129,15 @@ comentario		= \'
 	{private}		{return symbol(sym.Private);}
 	{print}			{return symbol(sym.Print);}
 	{char}			{return symbol(sym.Char);}
-
-	{dospuntos}		{return symbol(sym.DosPuntos);}
+        {no}                    {return symbol(sym.Not);}
+        {and}                   {return symbol(sym.And);}
+        {orinc}                 {return symbol(sym.Or);}
+        {orexc}                 {return symbol(sym.Xor);}
+        {Equivalencia}          {return symbol(sym.Eqv);}
+        {Implicacion}           {return symbol(sym.Imp);}
+        {exitfor}               {return symbol(sym.ExitFor);}
+        {exit}                  {return symbol(sym.Exit);}
+        {dospuntos}		{return symbol(sym.DosPuntos);}
 	{coma}			{return symbol(sym.Coma);}
 	{concatenacion}	{return symbol(sym.Concatenacion);}
 	{divientera}	{return symbol(sym.DiviEntera);}
