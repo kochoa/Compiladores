@@ -36,6 +36,7 @@ endselect               = End {space}+ Select //ya
 else 			= Else //ya
 case                    = Case //ya
 select                  = Select //ya
+selectcase              = Select {space}+ Case //ya
 for 			= For //ya
 float			= Float //ya
 function		= Function //ya
@@ -59,12 +60,13 @@ Equivalencia            = Eqv //ya
 Implicacion             = Imp //ya
 exitfor                 = Exit {space}* For //ya
 exit                    = Exit //ya
+return                  = Return
 
 
 letra			=[a-zA-Z]
 
 
-asigna			= \= //ya
+asigna                  = \= //ya
 tipobool 		= true | false //ya
 endline 		= ([\n\r])+ //ya
 int 			= [0-9]
@@ -113,6 +115,7 @@ comentario		= \' //ya
 	{else}			{return symbol(sym.Else);}
         {case}                  {return symbol(sym.Case);}
         {select}                {return symbol(sym.Select);}
+        {selectcase}            {return symbol(sym.SelectCase);}
 	{then}			{return symbol(sym.Then);}
 	{as}			{return symbol(sym.As);}
 	{to}			{return symbol(sym.To);}
@@ -137,6 +140,7 @@ comentario		= \' //ya
         {Implicacion}           {return symbol(sym.Imp);}
         {exitfor}               {return symbol(sym.ExitFor);}
         {exit}                  {return symbol(sym.Exit);}
+        {return}                {return symbol(sym.Return);}
         {dospuntos}		{return symbol(sym.DosPuntos);}
 	{coma}			{return symbol(sym.Coma);}
 	{concatenacion}	{return symbol(sym.Concatenacion);}
@@ -153,7 +157,7 @@ comentario		= \' //ya
 	{endline}		{return symbol(sym.EndLine);}
 	{entero}		{return symbol(sym.Entero);}
 	{space}			{}	
-	{asigna}		{return symbol(sym.Asignacion);}
+	{asigna}		{return symbol(sym.Asigna);}
 	{tipobool}		{return symbol(sym.TipoBoolean);}
 	{id}			{return symbol(sym.Id);}
 	{menor}			{return symbol(sym.Menor);}

@@ -1,6 +1,8 @@
+package compiladores;
 import java_cup.runtime.*;
 import java_cup.runtime.Scanner;
 import java.util.ArrayList;
+
 
 
 /* Preliminaries to set up and use the scanner.  */
@@ -25,47 +27,98 @@ public void unrecovered_syntax_error(Symbol cur_token) throws
 
 /*-* terminal symbols */
 
-terminal Suma, Resta, Mult, Div;
+terminal Igual, Suma, Resta, Mult, Div;
 terminal As, Dim, Funtion;
 terminal Char, Double, Float, Integer, String, Boolean, Entero, Ch;
-terminal If, Do, While, For, Then, Select, Case, To, Else, End, EndIf, EndWhile, EndFor, EndSelect, Loop, Next, Exit, ExitFor;
+terminal If, Do, While, For, Then, Select, Case, SelectCase, To, Else, End, EndIf, EndWhile, EndFor, EndSelect, Loop, Next, Exit, ExitFor;
 terminal Structs, Sub, Private, Print;
 terminal ParIzq, ParDer;
 terminal Menor, Mayor, Distinto, Potencia, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, DiviEntera, Not, And, Or, Xor, Eqv, Imp;
 terminal EndLine, Id, DosPuntos, Concatenacion, Coma;
-terminal Asignacion, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function;
+terminal Asigna, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function, Return;
 
 /*-* Non-non terminal symbols **/
-non terminal  expr, ini, exp, var_selec, pal_reser, dec_var, dec_var_more, tipo_reser;
+non terminal  ini, var_selec, dec_var, dec_var_mor,tipo_reser, statement, statement_list; 
+non terminal  if_stm, while_stm, for_stm, case_stm, selec_case_stm, return_stm, Do_stm;
+non terminal  value, operador_comp, expression, negacion_exp, and_exp, not_exp,comp_exp, add_exp, multi_exp;
 
 /* precedence */
+precedence left Igual;
 precedence left Suma, Resta;
 precedence left Mult, Div;
 
-//start with ini;
+start with ini;
 
 //ini ::= 
 
 /*-*
  * GRAMMAR RULES
  */
-expr         ::= If   ;
 
-dec_var               ::=Dim var_selec As tipo_reser  //tendira que ir el
-                         |Dim var_selec As tipo_reser Coma dec_var_more
+
+
+dec_var               ::=Dim var_selec As tipo_reser EndLine 
+                         |Dim var_selec As tipo_reser dec_var_mor EndLine;
                       
-dec_var_more          ::=var_selec As tipo_reser;
-                       //  |var_selec As tipo_reser;
+dec_var_mor           ::=Coma var_selec As tipo_reser EndLine
+                         |dec_var_mor;
 
-       
+//if_stm                ::=If 
+
  var_selec            ::=Id
                          |Ch;
 
  tipo_reser           ::=Char
-                         |Double
-                         |Float
                          |Integer
                          |String
                          |Boolean;
-                       
+
+expression           ::=and_exp Or expression
+                       |and_exp;
+
+
+
+and_exp             ::=not_exp And and_exp
+                       |not_exp;
+
+not_exp             ::=Not comp_exp
+                       |comp_exp;
+
+
+comp_exp            ::= add_exp operador_comp add_exp
+                        |add_exp;
+
+
+add_exp              ::= multi_exp Suma add_exp
+                         |multi_exp Resta add_exp
+                         |multi_exp;
+
+
+multi_exp            ::= negacion_exp Mult multi_exp
+                        |negacion_exp Div multi_exp
+                        |multi_exp;
+
+
+negacion_exp         ::= Resta value
+                        |value;
+
+value                ::= ParIzq expression ParDer
+                         |expression
+                         |Integer
+                         |String
+                         |Char
+                         |Boolean
+                         |Id;
+
+
+operador_comp          ::=Mayor
+                         |Menor
+                         |MayorIgual
+                         |MenorIgual
+                         |Distinto
+                         |Asigna;
+
+
+
+
 
