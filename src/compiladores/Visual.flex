@@ -22,48 +22,48 @@ import java_cup.runtime.*;
 	st = "";
 %init}
 
-as 			= As  //ya
-boolean			= Boolean //ya
-char			= Char //ya
-dim 			= Dim //ya
-do 			= Do  //ya
-double			= Double //ya
-end			= End //ya
-endif			= End {space}+ If //ya
-endwhile		= End {space}+ While  //ya
-endfor			= End {space}+ For //ya
-endselect               = End {space}+ Select //ya
-endsub                  = End {space}+ Sub //ya
-else 			= Else //ya
-elseif                  = Else {space}+ If //ya
-step                    =Step //ya
-case                    = Case //ya
-select                  = Select //ya
-selectcase              = Select {space}+ Case //ya
-for 			= For //ya
-float			= Float //ya
-if 			= If //ya
-integer			= Integer //ya
-loop			= Loop //ya
-next 			= Next //ya
-structs			= Structs //ya
-string			= String //ya
-sub			= Sub //ya
-function                = Function //ya
-main                    = Main //ya
-then 			= Then //ya
-to 			= To //ya
+as 			= As  
+boolean			= Boolean 
+char			= Char 
+dim 			= Dim 
+do 			= Do  
+double			= Double 
+end			= End 
+endif			= End {space}+ If 
+endwhile		= End {space}+ While  
+endfor			= End {space}+ For 
+endselect               = End {space}+ Select 
+endsub                  = End {space}+ Sub 
+else 			= Else 
+elseif                  = Else {space}+ If 
+step                    =Step 
+case                    = Case 
+select                  = Select 
+selectcase              = Select {space}+ Case 
+for 			= For 
+float			= Float 
+if 			= If 
+integer			= Integer 
+loop			= Loop 
+next 			= Next 
+structs			= Structs
+string			= String 
+sub			= Sub 
+function                = Function
+main                    = Main 
+then 			= Then 
+to 			= To 
 while 			= While
-private			= Private //ya
-print			= Print //ya
-no                      = Not //ya
-and                     = And //ya
-orinc                   = Or //ya
-orexc                   = Xor //ya
-Equivalencia            = Eqv //ya
-Implicacion             = Imp //ya
-exitfor                 = Exit {space}* For //ya
-exit                    = Exit //ya
+private			= Private 
+print			= Print 
+no                      = Not 
+and                     = And 
+orinc                   = Or 
+orexc                   = Xor 
+Equivalencia            = Eqv 
+Implicacion             = Imp 
+exitfor                 = Exit {space}* For 
+exit                    = Exit 
 return                  = Return
 byref                   = ByRef
 byval                   = ByVal
@@ -72,38 +72,38 @@ byval                   = ByVal
 letra			=[a-zA-Z]
 
 
-asigna                  = \= //ya
-tipobool 		= true | false //ya
-endline 		= ([\n\r])+ //ya
+asigna                  = \= 
+tipobool 		= true | false 
+endline 		= ([\n\r])+ 
 int 			= [0-9]
-entero			= {int}+ //ya
-id			= {letra}({guionbajo}?{letra}?{int}?)* //ya
-ch 			= "{letra}"  //ya
-dospuntos		= \: //ya
-coma 			= \, //ya
-menor			= \< //ya
-mayor			= \> //ya
-distinto 		= <\> //ya
-potencia	 	= \^ //ya
-menorigual		= <\= //ya
-mayorigual		= >\= //ya
-concatenacion   	= \& //ya
-comillas		= \" //ya
+entero			= {int}+ 
+id			= {letra}({guionbajo}?{letra}?{int}?)* 
+ch 			= "{letra}"  
+dospuntos		= \: 
+coma 			= \, 
+menor			= \< 
+mayor			= \> 
+distinto 		= <\> 
+potencia	 	= \^ 
+menorigual		= <\= 
+mayorigual		= >\= 
+concatenacion   	= \& 
+comillas		= \" 
 igcomillas		= \\{comillas}
-space 			= [ ] //ya
-tab			= \t //ya
-menos			= \- //ya
-mas			= \+ //ya
-por			= \* //ya
-entre			= \/ //ya
-divientera		= \\ //ya
-parizq			= \( //ya
-parder			= \) //ya
-guionbajo		= \_ //ya
-llavesder		= \{ //ya
-llavesizq		= \} //ya
+space 			= [ ] 
+tab			= \t 
+menos			= \- 
+mas			= \+ 
+por			= \* 
+entre			= \/ 
+divientera		= \\ 
+parizq			= \( 
+parder			= \) 
+guionbajo		= \_ 
+llavesder		= \{ 
+llavesizq		= \} 
 
-comentario		= \' //ya
+comentario		= \' 
 
 %%
 
@@ -151,8 +151,8 @@ comentario		= \' //ya
         {exitfor}               {return symbol(sym.ExitFor, yyline, yycolumn, yytext());}
         {exit}                  {return symbol(sym.Exit, yyline, yycolumn, yytext());}
         {return}                {return symbol(sym.Return, yyline, yycolumn, yytext());}
-        {byref}                {return symbol(sym.ByRef, yyline, yycolumn, yytext());}
-        {byval}                {return symbol(sym.ByVal, yyline, yycolumn, yytext());}
+        {byref}                 {return symbol(sym.ByRef, yyline, yycolumn, yytext());}
+        {byval}                 {return symbol(sym.ByVal, yyline, yycolumn, yytext());}
         {dospuntos}		{return symbol(sym.DosPuntos, yyline, yycolumn, yytext());}
 	{coma}			{return symbol(sym.Coma, yyline, yycolumn, yytext());}
 	{concatenacion}         {return symbol(sym.Concatenacion, yyline, yycolumn, yytext());}

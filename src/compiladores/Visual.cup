@@ -24,23 +24,26 @@ public void unrecovered_syntax_error(Symbol cur_token) throws
 :}
 
 /*-* terminal symbols */
+//estos son los que no estoy utilizando
+//terminal Double, Float, Select, Case, SelectCase, EndWhile, EndSelect, Potencia, DiviEntera, Eqv, Imp, Dospuntos;
 
+//estos son los terminales que estoy utilizando
 terminal Igual, Suma, Resta, Mult, Div;
 terminal As, Dim, Main, ByRef, ByVal;
-terminal Char, Double, Float, Integer, String, Boolean, Entero, Ch;
-terminal If, Do, While, For, Then, Select, Step, Case, SelectCase, To, Else, ElseIf, End, EndIf, EndWhile, EndFor, EndSelect, EndSub, Loop, Next, Exit, ExitFor;
+terminal Char, Integer, String, Boolean, Entero, Ch;
+terminal If, Do, While, For, Then, Step, To, Else, ElseIf, End, EndIf, EndFor, EndSub, Loop, Next, Exit, ExitFor;
 terminal Structs, Sub, Private, Print;
 terminal ParIzq, ParDer;
-terminal Menor, Mayor, Distinto, Potencia, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, DiviEntera, Not, And, Or, Xor, Eqv, Imp;
-terminal EndLine, Id, DosPuntos, Concatenacion, Coma;
+terminal Menor, Mayor, Distinto, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, Not, And, Or, Xor;
+terminal EndLine, Id, Concatenacion, Coma;
 terminal Asigna, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function, Return;
 
 /*-* Non-non terminal symbols **/
 non terminal  ini, var_selec, dec_stm, dec_var, list_dec,tipo_reser, statement, statement_list, function_stm; 
-non terminal  if_stm, while_stm, for_stm, return_stm, do_stm;
+non terminal  if_stm, for_stm, return_stm, do_stm;
 non terminal  value, operador_comp, expression, negacion_exp, and_exp, not_exp,comp_exp, add_exp, multi_exp;
-non terminal list_parm, function_body, function_list, main_stm, list_stm, parametro;
-non terminal condicion, sentencia, sent_list, else_list, else_stm, else_if_stm;
+non terminal  list_parm, function_body, function_list, main_stm, list_stm, parametro;
+non terminal  sentencia, sent_list, else_list, else_stm, else_if_stm;
 
 /* precedence */
 //precedence left Igual;
@@ -74,7 +77,15 @@ main_stm            ::= Sub Main ParIzq ParDer EndLine function_body EndSub EndL
 
 function_body       ::= dec_stm list_stm
                       |list_stm;
-                        
+
+sent_list           ::=sentencia
+                       |sent_list sentencia;
+
+
+sentencia         ::= if_stm
+                       |for_stm
+                       |do_stm;
+
 
 dec_stm             ::=Dim list_dec EndLine;
                        
@@ -85,8 +96,8 @@ dec_var             ::=var_selec As tipo_reser;
 list_dec            ::= dec_var
                        |list_dec Coma dec_var;
 
-if_stm              ::=If condicion Then sent_list EndIf
-                       |If condicion Then sent_list else_list EndIf;
+if_stm              ::=If expression Then EndLine sent_list EndLine EndIf EndLine
+                       |If expression Then EndLine sent_list  EndLine else_list EndLine EndIf EndLine;
                        
 
 else_list           ::= else_stm
@@ -97,11 +108,12 @@ else_stm            ::= Else sent_list;
 
 else_if_stm        ::= ElseIf sent_list;
 
-for_stm           ::= For var_selec Asigna  expression To expression Next var_selec
-                     |For var_selec Asigna  expression To expression ExitFor Next var_selec 
-                     |For var_selec Asigna  expression To expression Step expression sent_list ExitFor Next var_selec;
+for_stm           ::= For var_selec Asigna  expression To expression EndLine sent_list EndLine Next var_selec EndLine
+                     |For var_selec Asigna  expression To expression EndLine sent_list EndLine ExitFor EndLine sent_list EndLine Next var_selec EndLine
+                     |For var_selec Asigna  expression To expression Step expression EndLine sent_list EndLine ExitFor EndLine sent_list EndLine Next var_selec EndLine;
 
-                     
+do_stm            ::= Do While expression EndLine sent_list EndLine Loop EndLine 
+                      |Do EndLine sent_list EndLine Loop While expression EndLine;
                        
 
  var_selec            ::=Id
