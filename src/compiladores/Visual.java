@@ -787,59 +787,59 @@ class Visual implements java_cup.runtime.Scanner {
           }
         case 80: break;
         case 2: 
-          { return symbol(sym.Id, yyline, yycolumn, yytext());
+          { return new symbol(sym.Id);
           }
         case 81: break;
         case 3: 
-          { return symbol(sym.Asigna, yyline, yycolumn, yytext());
+          { return new symbol(sym.Asigna);
           }
         case 82: break;
         case 4: 
-          { return symbol(sym.EndLine, yyline, yycolumn, yytext());
+          { return new symbol(sym.EndLine);
           }
         case 83: break;
         case 5: 
-          { return symbol(sym.Entero, yyline, yycolumn, yytext());
+          { return new symbol(sym.Entero);
           }
         case 84: break;
         case 6: 
-          { return symbol(sym.LlaveDer, yyline, yycolumn, yytext());
+          { return new symbol(sym.LlaveDer);
           }
         case 85: break;
         case 7: 
-          { return symbol(sym.LlaveIzq, yyline, yycolumn, yytext());
+          { return new symbol(sym.LlaveIzq);
           }
         case 86: break;
         case 8: 
-          { return symbol(sym.DosPuntos, yyline, yycolumn, yytext());
+          { return new symbol(sym.DosPuntos);
           }
         case 87: break;
         case 9: 
-          { return symbol(sym.Coma, yyline, yycolumn, yytext());
+          { return new symbol(sym.Coma);
           }
         case 88: break;
         case 10: 
-          { return symbol(sym.Menor, yyline, yycolumn, yytext());
+          { return new symbol(sym.Menor);
           }
         case 89: break;
         case 11: 
-          { return symbol(sym.Mayor, yyline, yycolumn, yytext());
+          { return new symbol(sym.Mayor);
           }
         case 90: break;
         case 12: 
-          { return symbol(sym.Potencia, yyline, yycolumn, yytext());
+          { return new symbol(sym.Potencia);
           }
         case 91: break;
         case 13: 
-          { return symbol(sym.Concatenacion, yyline, yycolumn, yytext());
+          { return new symbol(sym.Concatenacion);
           }
         case 92: break;
         case 14: 
-          { yybegin(str, yyline, yycolumn, yytext());
+          { yybegin(str);
           }
         case 93: break;
         case 15: 
-          { return symbol(sym.DiviEntera, yyline, yycolumn, yytext());
+          { return new symbol(sym.DiviEntera);
           }
         case 94: break;
         case 16: 
@@ -847,31 +847,31 @@ class Visual implements java_cup.runtime.Scanner {
           }
         case 95: break;
         case 17: 
-          { return symbol(sym.Menos, yyline, yycolumn, yytext());
+          { return new symbol(sym.Menos);
           }
         case 96: break;
         case 18: 
-          { return symbol(sym.Suma, yyline, yycolumn, yytext());
+          { return new symbol(sym.Suma);
           }
         case 97: break;
         case 19: 
-          { return symbol(sym.Mult, yyline, yycolumn, yytext());
+          { return new symbol(sym.Mult);
           }
         case 98: break;
         case 20: 
-          { return symbol(sym.Div, yyline, yycolumn, yytext());
+          { return new symbol(sym.Div);
           }
         case 99: break;
         case 21: 
-          { return symbol(sym.ParIzq, yyline, yycolumn, yytext());
+          { return new symbol(sym.ParIzq);
           }
         case 100: break;
         case 22: 
-          { return symbol(sym.ParDer, yyline, yycolumn, yytext());
+          { return new symbol(sym.ParDer);
           }
         case 101: break;
         case 23: 
-          { return symbol(sym.GuionBajo, yyline, yycolumn, yytext());
+          { return new symbol(sym.GuionBajo);
           }
         case 102: break;
         case 24: 
@@ -895,35 +895,35 @@ class Visual implements java_cup.runtime.Scanner {
           }
         case 107: break;
         case 29: 
-          { return symbol(sym.As, yyline, yycolumn, yytext());
+          { return new symbol(sym.As);
           }
         case 108: break;
         case 30: 
-          { return symbol(sym.Do, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.Do);
           }
         case 109: break;
         case 31: 
-          { return symbol(sym.If, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.If);
           }
         case 110: break;
         case 32: 
-          { return symbol(sym.To, yyline, yycolumn, yytext());
+          { return new symbol(sym.To);
           }
         case 111: break;
         case 33: 
-          { return symbol(sym.Or, yyline, yycolumn, yytext());
+          { return new symbol(sym.Or);
           }
         case 112: break;
         case 34: 
-          { return symbol(sym.MenorIgual, yyline, yycolumn, yytext());
+          { return new symbol(sym.MenorIgual);
           }
         case 113: break;
         case 35: 
-          { return symbol(sym.Distinto, yyline, yycolumn, yytext());
+          { return new symbol(sym.Distinto);
           }
         case 114: break;
         case 36: 
-          { return symbol(sym.MayorIgual, yyline, yycolumn, yytext());
+          { return new symbol(sym.MayorIgual);
           }
         case 115: break;
         case 37: 
@@ -931,171 +931,171 @@ class Visual implements java_cup.runtime.Scanner {
           }
         case 116: break;
         case 38: 
-          { return symbol(sym.And, yyline, yycolumn, yytext());
+          { return new symbol(sym.And);
           }
         case 117: break;
         case 39: 
-          { return symbol(sym.Dim, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.Dim);
           }
         case 118: break;
         case 40: 
-          { return symbol(sym.End, yyline, yycolumn, yytext());
+          { return new symbol(sym.End);
           }
         case 119: break;
         case 41: 
-          { return symbol(sym.Eqv, yyline, yycolumn, yytext());
+          { return new symbol(sym.Eqv);
           }
         case 120: break;
         case 42: 
-          { return symbol(sym.Imp, yyline, yycolumn, yytext());
+          { return new symbol(sym.Imp);
           }
         case 121: break;
         case 43: 
-          { return symbol(sym.For, yyline, yycolumn, yytext());
+          { return new symbol(sym.For);
           }
         case 122: break;
         case 44: 
-          { return symbol(sym.Sub, yyline, yycolumn, yytext());
+          { return new symbol(sym.Sub);
           }
         case 123: break;
         case 45: 
-          { return symbol(sym.Not, yyline, yycolumn, yytext());
+          { return new symbol(sym.Not);
           }
         case 124: break;
         case 46: 
-          { return symbol(sym.Xor, yyline, yycolumn, yytext());
+          { return new symbol(sym.Xor);
           }
         case 125: break;
         case 47: 
-          { return symbol(sym.Case, yyline, yycolumn, yytext());
+          { return new symbol(sym.Case);
           }
         case 126: break;
         case 48: 
-          { return symbol(sym.Char, yyline, yycolumn, yytext());
+          { return new symbol(sym.Char);
           }
         case 127: break;
         case 49: 
-          { return symbol(sym.Else, yyline, yycolumn, yytext());
+          { return new symbol(sym.Else);
           }
         case 128: break;
         case 50: 
-          { return symbol(sym.Exit, yyline, yycolumn, yytext());
+          { return new symbol(sym.Exit);
           }
         case 129: break;
         case 51: 
-          { return symbol(sym.Step, yyline, yycolumn, yytext());
+          { return new symbol(sym.Step);
           }
         case 130: break;
         case 52: 
-          { return symbol(sym.TipoBoolean, yyline, yycolumn, yytext());
+          { return new symbol(sym.TipoBoolean);
           }
         case 131: break;
         case 53: 
-          { return symbol(sym.Loop, yyline, yycolumn, yytext());
+          { return new symbol(sym.Loop);
           }
         case 132: break;
         case 54: 
-          { return symbol(sym.Next, yyline, yycolumn, yytext());
+          { return new symbol(sym.Next);
           }
         case 133: break;
         case 55: 
-          { return symbol(sym.Main, yyline, yycolumn, yytext());
+          { return new symbol(sym.Main);
           }
         case 134: break;
         case 56: 
-          { return symbol(sym.Then, yyline, yycolumn, yytext());
+          { return new symbol(sym.Then);
           }
         case 135: break;
         case 57: 
-          { return symbol(sym.ByRef, yyline, yycolumn, yytext());
+          { return new symbol(sym.ByRef);
           }
         case 136: break;
         case 58: 
-          { return symbol(sym.ByVal, yyline, yycolumn, yytext());
+          { return new symbol(sym.ByVal);
           }
         case 137: break;
         case 59: 
-          { return symbol(sym.While, yyline, yycolumn, yytext());
+          { return new symbol(sym.While);
           }
         case 138: break;
         case 60: 
-          { return symbol(sym.Float, yyline, yycolumn, yytext());
+          { return new symbol(sym.Float);
           }
         case 139: break;
         case 61: 
-          { return symbol(sym.Print, yyline, yycolumn, yytext());
+          { return new symbol(sym.Print);
           }
         case 140: break;
         case 62: 
-          { return symbol(sym.Double, yyline, yycolumn, yytext());
+          { return new symbol(sym.Double);
           }
         case 141: break;
         case 63: 
-          { return symbol(sym.EndIf, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.EndIf);
           }
         case 142: break;
         case 64: 
-          { return symbol(sym.Select, yyline, yycolumn, yytext());
+          { return new symbol(sym.Select);
           }
         case 143: break;
         case 65: 
-          { return symbol(sym.String, yyline, yycolumn, yytext());
+          { return new symbol(sym.String);
           }
         case 144: break;
         case 66: 
-          { return symbol(sym.Return, yyline, yycolumn, yytext());
+          { return new symbol(sym.Return);
           }
         case 145: break;
         case 67: 
-          { return symbol(sym.Boolean, yyline, yycolumn, yytext());
+          { return new symbol(sym.Boolean);
           }
         case 146: break;
         case 68: 
-          { return symbol(sym.ElseIf, yyline, yycolumn, yytext());
+          { return new symbol(sym.ElseIf);
           }
         case 147: break;
         case 69: 
-          { return symbol(sym.EndFor, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.EndFor);
           }
         case 148: break;
         case 70: 
-          { return symbol(sym.EndSub, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.EndSub);
           }
         case 149: break;
         case 71: 
-          { return symbol(sym.ExitFor, yyline, yycolumn, yytext());
+          { return new symbol(sym.ExitFor);
           }
         case 150: break;
         case 72: 
-          { return symbol(sym.Integer, yyline, yycolumn, yytext());
+          { return new symbol(sym.Integer);
           }
         case 151: break;
         case 73: 
-          { return symbol(sym.Structs, yyline, yycolumn, yytext());
+          { return new symbol(sym.Structs);
           }
         case 152: break;
         case 74: 
-          { return symbol(sym.Private, yyline, yycolumn, yytext());
+          { return new symbol(sym.Private);
           }
         case 153: break;
         case 75: 
-          { return symbol(sym.Ch, yyline, yycolumn, yytext());
+          { return new symbol(sym.Ch);
           }
         case 154: break;
         case 76: 
-          { return symbol(sym.Function, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.Function);
           }
         case 155: break;
         case 77: 
-          { return symbol(sym.EndWhile, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.EndWhile);
           }
         case 156: break;
         case 78: 
-          { return symbol(sym.EndSelect, yyline, yycolumn, yytext());
+          { System.out.println(yytext()); return new symbol(sym.EndSelect);
           }
         case 157: break;
         case 79: 
-          { return symbol(sym.SelectCase, yyline, yycolumn, yytext());
+          { return new symbol(sym.SelectCase);
           }
         case 158: break;
         default: 

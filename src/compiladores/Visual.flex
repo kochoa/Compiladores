@@ -108,78 +108,78 @@ comentario		= \'
 %%
 
 <YYINITIAL>{
-	{dim}			{return symbol(sym.Dim, yyline, yycolumn, yytext());}
-	{do}			{return symbol(sym.Do, yyline, yycolumn, yytext());}
-	{if}			{return symbol(sym.If, yyline, yycolumn, yytext());}
-	{function}		{return symbol(sym.Function, yyline, yycolumn, yytext());}
-	{endif}			{return symbol(sym.EndIf, yyline, yycolumn, yytext());}
-	{endwhile}		{return symbol(sym.EndWhile, yyline, yycolumn, yytext());}
-	{endfor}		{return symbol(sym.EndFor, yyline, yycolumn, yytext());}
-        {endselect}             {return symbol(sym.EndSelect, yyline, yycolumn, yytext());}
-        {endsub}		{return symbol(sym.EndSub, yyline, yycolumn, yytext());}
-	{while}			{return symbol(sym.While, yyline, yycolumn, yytext());}
-	{for}			{return symbol(sym.For, yyline, yycolumn, yytext());}
-	{else}			{return symbol(sym.Else, yyline, yycolumn, yytext());}
-        {elseif}		{return symbol(sym.ElseIf, yyline, yycolumn, yytext());}
-        {step}  		{return symbol(sym.Step, yyline, yycolumn, yytext());}
-        {case}                  {return symbol(sym.Case, yyline, yycolumn, yytext());}
-        {select}                {return symbol(sym.Select, yyline, yycolumn, yytext());}
-        {selectcase}            {return symbol(sym.SelectCase, yyline, yycolumn, yytext());}
-	{then}			{return symbol(sym.Then, yyline, yycolumn, yytext());}
-	{as}			{return symbol(sym.As, yyline, yycolumn, yytext());}
-	{to}			{return symbol(sym.To, yyline, yycolumn, yytext());}
-	{next}			{return symbol(sym.Next, yyline, yycolumn, yytext());}
-	{loop}			{return symbol(sym.Loop, yyline, yycolumn, yytext());}
-	{structs}		{return symbol(sym.Structs, yyline, yycolumn, yytext());}
-	{sub}			{return symbol(sym.Sub, yyline, yycolumn, yytext());}
-        {main}			{return symbol(sym.Main, yyline, yycolumn, yytext());}
-     	{integer}		{return symbol(sym.Integer, yyline, yycolumn, yytext());}
-	{float}			{return symbol(sym.Float, yyline, yycolumn, yytext());}
-	{double}		{return symbol(sym.Double, yyline, yycolumn, yytext());}
-	{boolean}		{return symbol(sym.Boolean, yyline, yycolumn, yytext());}
-	{string}		{return symbol(sym.String, yyline, yycolumn, yytext());}
-	{end}			{return symbol(sym.End, yyline, yycolumn, yytext());}
-	{private}		{return symbol(sym.Private, yyline, yycolumn, yytext());}
-	{print}			{return symbol(sym.Print, yyline, yycolumn, yytext());}
-	{char}			{return symbol(sym.Char, yyline, yycolumn, yytext());}
-        {no}                    {return symbol(sym.Not, yyline, yycolumn, yytext());}
-        {and}                   {return symbol(sym.And, yyline, yycolumn, yytext());}
-        {orinc}                 {return symbol(sym.Or, yyline, yycolumn, yytext());}
-        {orexc}                 {return symbol(sym.Xor, yyline, yycolumn, yytext());}
-        {Equivalencia}          {return symbol(sym.Eqv, yyline, yycolumn, yytext());}
-        {Implicacion}           {return symbol(sym.Imp, yyline, yycolumn, yytext());}
-        {exitfor}               {return symbol(sym.ExitFor, yyline, yycolumn, yytext());}
-        {exit}                  {return symbol(sym.Exit, yyline, yycolumn, yytext());}
-        {return}                {return symbol(sym.Return, yyline, yycolumn, yytext());}
-        {byref}                 {return symbol(sym.ByRef, yyline, yycolumn, yytext());}
-        {byval}                 {return symbol(sym.ByVal, yyline, yycolumn, yytext());}
-        {dospuntos}		{return symbol(sym.DosPuntos, yyline, yycolumn, yytext());}
-	{coma}			{return symbol(sym.Coma, yyline, yycolumn, yytext());}
-	{concatenacion}         {return symbol(sym.Concatenacion, yyline, yycolumn, yytext());}
-	{divientera}            {return symbol(sym.DiviEntera, yyline, yycolumn, yytext());}
-	{potencia}		{return symbol(sym.Potencia, yyline, yycolumn, yytext());}
-	{distinto}		{return symbol(sym.Distinto, yyline, yycolumn, yytext());}	
-	{parder}		{return symbol(sym.ParDer, yyline, yycolumn, yytext());}
-	{parizq}		{return symbol(sym.ParIzq, yyline, yycolumn, yytext());}
-	{guionbajo}		{return symbol(sym.GuionBajo, yyline, yycolumn, yytext());}
-	{ch}			{return symbol(sym.Ch, yyline, yycolumn, yytext());}
-	{llavesder}		{return symbol(sym.LlaveDer, yyline, yycolumn, yytext());}
-	{llavesizq}		{return symbol(sym.LlaveIzq, yyline, yycolumn, yytext());}
-	{comillas}		{yybegin(str, yyline, yycolumn, yytext());}
-	{endline}		{return symbol(sym.EndLine, yyline, yycolumn, yytext());}
-	{entero}		{return symbol(sym.Entero, yyline, yycolumn, yytext());}
+	{dim}			{System.out.println(yytext()); return new symbol(sym.Dim);}
+	{do}			{System.out.println(yytext()); return new symbol(sym.Do);}
+	{if}			{System.out.println(yytext()); return new symbol(sym.If);}
+	{function}		{System.out.println(yytext()); return new symbol(sym.Function);}
+	{endif}			{System.out.println(yytext()); return new symbol(sym.EndIf);}
+	{endwhile}		{System.out.println(yytext()); return new symbol(sym.EndWhile);}
+	{endfor}		{System.out.println(yytext()); return new symbol(sym.EndFor);}
+        {endselect}             {System.out.println(yytext()); return new symbol(sym.EndSelect);}
+        {endsub}		{System.out.println(yytext()); return new symbol(sym.EndSub);}
+	{while}			{return new symbol(sym.While);}
+	{for}			{return new symbol(sym.For);}
+	{else}			{return new symbol(sym.Else);}
+        {elseif}		{return new symbol(sym.ElseIf);}
+        {step}  		{return new symbol(sym.Step);}
+        {case}                  {return new symbol(sym.Case);}
+        {select}                {return new symbol(sym.Select);}
+        {selectcase}            {return new symbol(sym.SelectCase);}
+	{then}			{return new symbol(sym.Then);}
+	{as}			{return new symbol(sym.As);}
+	{to}			{return new symbol(sym.To);}
+	{next}			{return new symbol(sym.Next);}
+	{loop}			{return new symbol(sym.Loop);}
+	{structs}		{return new symbol(sym.Structs);}
+	{sub}			{return new symbol(sym.Sub);}
+        {main}			{return new symbol(sym.Main);}
+     	{integer}		{return new symbol(sym.Integer);}
+	{float}			{return new symbol(sym.Float);}
+	{double}		{return new symbol(sym.Double);}
+	{boolean}		{return new symbol(sym.Boolean);}
+	{string}		{return new symbol(sym.String);}
+	{end}			{return new symbol(sym.End);}
+	{private}		{return new symbol(sym.Private);}
+	{print}			{return new symbol(sym.Print);}
+	{char}			{return new symbol(sym.Char);}
+        {no}                    {return new symbol(sym.Not);}
+        {and}                   {return new symbol(sym.And);}
+        {orinc}                 {return new symbol(sym.Or);}
+        {orexc}                 {return new symbol(sym.Xor);}
+        {Equivalencia}          {return new symbol(sym.Eqv);}
+        {Implicacion}           {return new symbol(sym.Imp);}
+        {exitfor}               {return new symbol(sym.ExitFor);}
+        {exit}                  {return new symbol(sym.Exit);}
+        {return}                {return new symbol(sym.Return);}
+        {byref}                 {return new symbol(sym.ByRef);}
+        {byval}                 {return new symbol(sym.ByVal);}
+        {dospuntos}		{return new symbol(sym.DosPuntos);}
+	{coma}			{return new symbol(sym.Coma);}
+	{concatenacion}         {return new symbol(sym.Concatenacion);}
+	{divientera}            {return new symbol(sym.DiviEntera);}
+	{potencia}		{return new symbol(sym.Potencia);}
+	{distinto}		{return new symbol(sym.Distinto);}	
+	{parder}		{return new symbol(sym.ParDer);}
+	{parizq}		{return new symbol(sym.ParIzq);}
+	{guionbajo}		{return new symbol(sym.GuionBajo);}
+	{ch}			{return new symbol(sym.Ch);}
+	{llavesder}		{return new symbol(sym.LlaveDer);}
+	{llavesizq}		{return new symbol(sym.LlaveIzq);}
+	{comillas}		{yybegin(str);}
+	{endline}		{return new symbol(sym.EndLine);}
+	{entero}		{return new symbol(sym.Entero);}
 	{space}			{}	
-	{asigna}		{return symbol(sym.Asigna, yyline, yycolumn, yytext());}
-	{tipobool}		{return symbol(sym.TipoBoolean, yyline, yycolumn, yytext());}
-	{id}			{return symbol(sym.Id, yyline, yycolumn, yytext());}
-	{menor}			{return symbol(sym.Menor, yyline, yycolumn, yytext());}
-	{mayor}			{return symbol(sym.Mayor, yyline, yycolumn, yytext());}
-	{menorigual}    	{return symbol(sym.MenorIgual, yyline, yycolumn, yytext());}
-	{mayorigual}            {return symbol(sym.MayorIgual, yyline, yycolumn, yytext());}
-	{menos}			{return symbol(sym.Menos, yyline, yycolumn, yytext());}
-	{mas}			{return symbol(sym.Suma, yyline, yycolumn, yytext());}
-	{por}			{return symbol(sym.Mult, yyline, yycolumn, yytext());}
-	{entre}			{return symbol(sym.Div, yyline, yycolumn, yytext());}
+	{asigna}		{return new symbol(sym.Asigna);}
+	{tipobool}		{return new symbol(sym.TipoBoolean);}
+	{id}			{return new symbol(sym.Id);}
+	{menor}			{return new symbol(sym.Menor);}
+	{mayor}			{return new symbol(sym.Mayor);}
+	{menorigual}    	{return new symbol(sym.MenorIgual);}
+	{mayorigual}            {return new symbol(sym.MayorIgual);}
+	{menos}			{return new symbol(sym.Menos);}
+	{mas}			{return new symbol(sym.Suma);}
+	{por}			{return new symbol(sym.Mult);}
+	{entre}			{return new symbol(sym.Div);}
 	{comentario}	{yybegin(com);}
 	{tab}			{}
 	.				{System.out.println("Error Lexico. Fila: "+ (yyline+1) +" Columna: " + (yycolumn+1) );}

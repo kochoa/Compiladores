@@ -6,8 +6,8 @@ import java_cup.runtime.Scanner;
 
 
 /* Preliminaries to set up and use the scanner.  */
-init with {: scanner.init();              :};
-scan with {: return super.scanner.next_token(); :};
+//init with {: scanner.init();              :};
+//scan with {: return super.scanner.next_token(); :};
 scan with {: return super.getScanner().next_token(); :};
 
 parser code{:
