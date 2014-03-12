@@ -10,14 +10,20 @@ package compiladores;
  * @author owner
  */
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 public class Main {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, Exception {
         // TODO code application logic here
-        jflex.Main.generate(new File("src\\compiladores\\Visual.flex"));
+   /*     VisualForm f =  new VisualForm();
+       f.setVisible(true);
+    }
+        
+       jflex.Main.generate(new File("src\\compiladores\\Visual.flex"));
 
         String opciones[] = new String[5];
         //Seleccionamos la opción de dirección de destino
@@ -35,6 +41,18 @@ public class Main {
         } catch (Exception e) {
             System.out.print(e);
         }
-    }
+        
+        
+        
+        
+        /*
+         */
+         
+        FileReader hola = new FileReader("src\\p.vb");
+        lexer h= new lexer(hola);
+        Analizador o = new Analizador(h);
+        o.parse();
+        
 
+    }
 }
