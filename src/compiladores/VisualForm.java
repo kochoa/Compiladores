@@ -176,11 +176,12 @@ public class VisualForm extends javax.swing.JFrame {
                    Logger.getLogger(VisualForm.class.getName()).log(Level.SEVERE, null, ex);
                }
                //<editor-fold defaultstate="collapsed" desc="tiene que abrir el archivo">
-               try (BufferedReader LEER = new BufferedReader(FICHERO)) {
-                   while((TEXTO=LEER.readLine()) != null) {
+               try {
+                   BufferedReader Escribir = new BufferedReader(FICHERO);
+                   while((TEXTO=Escribir.readLine()) != null) {
                        this.jtxtcodigo.append(TEXTO+ "\n");
                    }
-               }   
+               } catch(FileNotFoundException exp){}
             }   
         } catch(FileNotFoundException exp) {    
                 //JOptionPane.showMessageDialog(rootPane, "El archivo no existe o no se encuentra en esta carpeta.");  
@@ -210,11 +211,12 @@ try {
                } catch (FileNotFoundException ex) {
                    Logger.getLogger(VisualForm.class.getName()).log(Level.SEVERE, null, ex);
                }
-               try (BufferedReader LEER = new BufferedReader(FICHERO)) {
+               try {
+                   BufferedReader LEER = new BufferedReader(FICHERO);
                    while((TEXTO=LEER.readLine()) != null) {
                        this.jtxtcodigo.append(TEXTO+ "\n");
                    }
-               }   
+               } catch(FileNotFoundException exp){}
             }   
         } catch(FileNotFoundException exp) {    
                 //JOptionPane.showMessageDialog(rootPane, "El archivo no existe o no se encuentra en esta carpeta.");  
