@@ -1,7 +1,11 @@
+package compiladores;
+import compiladores.sym;
 import java_cup.runtime.*;
+import java.util.ArrayList;
+
 %%
 %unicode
-%class Visual
+%class lexer
 %cup
 %int
 %column
@@ -9,9 +13,12 @@ import java_cup.runtime.*;
 %states str,com
 
 %{
+    
+        ArrayList<Visual_Error> erroresLexicos = new ArrayList<Visual_Error>();
+
 	String st;
 	private Symbol symbol(int type) {
-    	return new Symbol(type, yyline, yycolumn);
+    	return new Symbol(type, yyline, yycolumn, yytext());
   	}
   	private Symbol symbol(int type, Object value) {
     	return new Symbol(type, yyline, yycolumn, value);
@@ -34,9 +41,11 @@ endwhile		= End {space}+ While
 endfor			= End {space}+ For 
 endselect               = End {space}+ Select 
 endsub                  = End {space}+ Sub 
+endfunction             = End {space}+ Function
+endtype                 = End {space}+ Type
 else 			= Else 
 elseif                  = Else {space}+ If 
-step                    =Step 
+step                    = Step
 case                    = Case 
 select                  = Select 
 selectcase              = Select {space}+ Case 
@@ -47,6 +56,7 @@ integer			= Integer
 loop			= Loop 
 next 			= Next 
 structs			= Structs
+type                    = Type
 string			= String 
 sub			= Sub 
 function                = Function
@@ -69,12 +79,10 @@ byref                   = ByRef
 byval                   = ByVal
 
 
-letra			=[a-zA-Z]
-
-
+letra			= [a-zA-Z]
 asigna                  = \= 
 tipobool 		= true | false 
-endline 		= ([\n\r])+ 
+endline 		= ([\n\r]|[\n]|[\r])+
 int 			= [0-9]
 entero			= {int}+ 
 id			= {letra}({guionbajo}?{letra}?{int}?)* 
@@ -108,81 +116,85 @@ comentario		= \'
 %%
 
 <YYINITIAL>{
-	{dim}			{System.out.println(yytext()); return new symbol(sym.Dim);}
-	{do}			{System.out.println(yytext()); return new symbol(sym.Do);}
-	{if}			{System.out.println(yytext()); return new symbol(sym.If);}
-	{function}		{System.out.println(yytext()); return new symbol(sym.Function);}
-	{endif}			{System.out.println(yytext()); return new symbol(sym.EndIf);}
-	{endwhile}		{System.out.println(yytext()); return new symbol(sym.EndWhile);}
-	{endfor}		{System.out.println(yytext()); return new symbol(sym.EndFor);}
-        {endselect}             {System.out.println(yytext()); return new symbol(sym.EndSelect);}
-        {endsub}		{System.out.println(yytext()); return new symbol(sym.EndSub);}
-	{while}			{return new symbol(sym.While);}
-	{for}			{return new symbol(sym.For);}
-	{else}			{return new symbol(sym.Else);}
-        {elseif}		{return new symbol(sym.ElseIf);}
-        {step}  		{return new symbol(sym.Step);}
-        {case}                  {return new symbol(sym.Case);}
-        {select}                {return new symbol(sym.Select);}
-        {selectcase}            {return new symbol(sym.SelectCase);}
-	{then}			{return new symbol(sym.Then);}
-	{as}			{return new symbol(sym.As);}
-	{to}			{return new symbol(sym.To);}
-	{next}			{return new symbol(sym.Next);}
-	{loop}			{return new symbol(sym.Loop);}
-	{structs}		{return new symbol(sym.Structs);}
-	{sub}			{return new symbol(sym.Sub);}
-        {main}			{return new symbol(sym.Main);}
-     	{integer}		{return new symbol(sym.Integer);}
-	{float}			{return new symbol(sym.Float);}
-	{double}		{return new symbol(sym.Double);}
-	{boolean}		{return new symbol(sym.Boolean);}
-	{string}		{return new symbol(sym.String);}
-	{end}			{return new symbol(sym.End);}
-	{private}		{return new symbol(sym.Private);}
-	{print}			{return new symbol(sym.Print);}
-	{char}			{return new symbol(sym.Char);}
-        {no}                    {return new symbol(sym.Not);}
-        {and}                   {return new symbol(sym.And);}
-        {orinc}                 {return new symbol(sym.Or);}
-        {orexc}                 {return new symbol(sym.Xor);}
-        {Equivalencia}          {return new symbol(sym.Eqv);}
-        {Implicacion}           {return new symbol(sym.Imp);}
-        {exitfor}               {return new symbol(sym.ExitFor);}
-        {exit}                  {return new symbol(sym.Exit);}
-        {return}                {return new symbol(sym.Return);}
-        {byref}                 {return new symbol(sym.ByRef);}
-        {byval}                 {return new symbol(sym.ByVal);}
-        {dospuntos}		{return new symbol(sym.DosPuntos);}
-	{coma}			{return new symbol(sym.Coma);}
-	{concatenacion}         {return new symbol(sym.Concatenacion);}
-	{divientera}            {return new symbol(sym.DiviEntera);}
-	{potencia}		{return new symbol(sym.Potencia);}
-	{distinto}		{return new symbol(sym.Distinto);}	
-	{parder}		{return new symbol(sym.ParDer);}
-	{parizq}		{return new symbol(sym.ParIzq);}
-	{guionbajo}		{return new symbol(sym.GuionBajo);}
-	{ch}			{return new symbol(sym.Ch);}
-	{llavesder}		{return new symbol(sym.LlaveDer);}
-	{llavesizq}		{return new symbol(sym.LlaveIzq);}
+	{dim}			{return symbol(sym.Dim);}
+	{do}			{return symbol(sym.Do);}
+	{if}			{return symbol(sym.If);}
+	{function}		{return symbol(sym.Function);}
+	{endif}			{return symbol(sym.EndIf);}
+	{endwhile}		{return symbol(sym.EndWhile);}
+	{endfor}		{return symbol(sym.EndFor);}
+        {endselect}             {return symbol(sym.EndSelect);}
+        {endsub}		{return symbol(sym.EndSub);}
+        {endfunction}		{return symbol(sym.EndFunction);}
+        {endtype}               {return symbol(sym.EndType);}
+	{while}			{return symbol(sym.While);}
+	{for}			{return symbol(sym.For);}
+	{else}			{return symbol(sym.Else);}
+        {elseif}		{return symbol(sym.ElseIf);}
+        {step}  		{return symbol(sym.Step);}
+        {case}                  {return symbol(sym.Case);}
+        {select}                {return symbol(sym.Select);}
+        {selectcase}            {return symbol(sym.SelectCase);}
+	{then}			{return symbol(sym.Then);}
+	{as}			{return symbol(sym.As);}
+	{to}			{return symbol(sym.To);}
+	{next}			{return symbol(sym.Next);}
+	{loop}			{return symbol(sym.Loop);}
+	{structs}		{return symbol(sym.Structs);}
+        {type}                  {return symbol(sym.Type);}
+	{sub}			{return symbol(sym.Sub);}
+        {main}			{return symbol(sym.Main);}
+     	{integer}		{return symbol(sym.Integer);}
+	{float}			{return symbol(sym.Float);}
+	{double}		{return symbol(sym.Double);}
+	{boolean}		{return symbol(sym.Boolean);}
+	{string}		{return symbol(sym.String);}
+	{end}			{return symbol(sym.End);}
+	{private}		{return symbol(sym.Private);}
+	{print}			{return symbol(sym.Print);}
+	{char}			{return symbol(sym.Char);}
+        {no}                    {return symbol(sym.Not);}
+        {and}                   {return symbol(sym.And);}
+        {orinc}                 {return symbol(sym.Or);}
+        {orexc}                 {return symbol(sym.Xor);}
+        {Equivalencia}          {return symbol(sym.Eqv);}
+        {Implicacion}           {return symbol(sym.Imp);}
+        {exitfor}               {return symbol(sym.ExitFor);}
+        {exit}                  {return symbol(sym.Exit);}
+        {return}                {return symbol(sym.Return);}
+        {byref}                 {return symbol(sym.ByRef);}
+        {byval}                 {return symbol(sym.ByVal);}
+        {dospuntos}		{return symbol(sym.DosPuntos);}
+	{coma}			{return symbol(sym.Coma);}
+	{concatenacion}         {return symbol(sym.Concatenacion);}
+	{divientera}            {return symbol(sym.DiviEntera);}
+	{potencia}		{return symbol(sym.Potencia);}
+	{distinto}		{return symbol(sym.Distinto);}	
+	{parder}		{return symbol(sym.ParDer);}
+	{parizq}		{return symbol(sym.ParIzq);}
+	{guionbajo}		{return symbol(sym.GuionBajo);}
+	{ch}			{return symbol(sym.Ch);}
+	{llavesder}		{return symbol(sym.LlaveDer);}
+	{llavesizq}		{return symbol(sym.LlaveIzq);}
 	{comillas}		{yybegin(str);}
-	{endline}		{return new symbol(sym.EndLine);}
-	{entero}		{return new symbol(sym.Entero);}
+	{endline}		{return symbol(sym.EndLine);}
+	{entero}		{return symbol(sym.Entero);}
 	{space}			{}	
-	{asigna}		{return new symbol(sym.Asigna);}
-	{tipobool}		{return new symbol(sym.TipoBoolean);}
-	{id}			{return new symbol(sym.Id);}
-	{menor}			{return new symbol(sym.Menor);}
-	{mayor}			{return new symbol(sym.Mayor);}
-	{menorigual}    	{return new symbol(sym.MenorIgual);}
-	{mayorigual}            {return new symbol(sym.MayorIgual);}
-	{menos}			{return new symbol(sym.Menos);}
-	{mas}			{return new symbol(sym.Suma);}
-	{por}			{return new symbol(sym.Mult);}
-	{entre}			{return new symbol(sym.Div);}
-	{comentario}	{yybegin(com);}
+	{asigna}		{return symbol(sym.Asigna);}
+	{tipobool}		{return symbol(sym.TipoBoolean);}
+	{id}			{return symbol(sym.Id);}
+	{menor}			{return symbol(sym.Menor);}
+	{mayor}			{return symbol(sym.Mayor);}
+	{menorigual}    	{return symbol(sym.MenorIgual);}
+	{mayorigual}            {return symbol(sym.MayorIgual);}
+	{menos}			{return symbol(sym.Menos);}
+	{mas}			{return symbol(sym.Suma);}
+	{por}			{return symbol(sym.Mult);}
+	{entre}			{return symbol(sym.Div);}
+	{comentario}            {yybegin(com);}
 	{tab}			{}
-	.				{System.out.println("Error Lexico. Fila: "+ (yyline+1) +" Columna: " + (yycolumn+1) );}
+	.                       {System.out.println("Errores lexicos:" + erroresLexicos.add(new Visual_Error( yyline +1 , yycolumn +1, "Caracter invalido en la linea " + (yyline +1) +", columna " + (yycolumn +1) + ". No se esperaba :" + yytext() )));}	
+ //{System.out.println("Error Lexico. Fila: "+ (yyline+1) +" Columna: " + (yycolumn+1) );}
 }
 
 <str> {
