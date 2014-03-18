@@ -12,15 +12,15 @@ scan with {: return super.getScanner().next_token(); :};
 parser code{:
     ArrayList<Visual_Error> erroresSintacticos = new ArrayList<Visual_Error>();
    
-      	public void syntax_error(Symbol cur_token) {
-        report_error("Sytax error at line " + (cur_token.left+1) +", column " + (cur_token.right+1), null);
+      	public void report_error(Symbol cur_token) {
+        System.out.println("La Cadena: " + cur_token.value +" en la Linea: " + (cur_token.left+1) +", Columna: "+(cur_token.right+1)+ " esta fuera de contexto.");
+        report_error("Syntax error at line " + (cur_token.left+1) +", column " + (cur_token.right+1), null);
         erroresSintacticos.add(new Visual_Error(cur_token.left + 1, cur_token.right + 1,"La Cadena: " + cur_token.value +" en la Linea: " + (cur_token.left+1) +", Columna: "+(cur_token.right+1)+ " esta fuera de contexto.") );
     }
 
 
 public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
  // report_fatal_error(" ", null);
- 
   erroresSintacticos.add(new Visual_Error(-1,0,"Error desconocido, se ha detenido la compilación causado por: " +cur_token.value + " en la Linea " + (cur_token.left+1) +", Columna: "+(cur_token.right+1)) );
    System.out.println("Error desconocido, se ha detenido la compilación causado por: " +cur_token.value + " en la Linea " + (cur_token.left+1) +", Columna: "+(cur_token.right+1));  
 }
@@ -34,7 +34,7 @@ action code {:
 		erroresSintacticos2.add(new Visual_Error(cur_token.left +1, cur_token.right + 1,"Se esperaba un s�mbolo de tipo: " + falta + " cerca de la Linea: " + (cur_token.left+1) + ", Columna: "+(cur_token.right+1)));
 	}
 	public void add_error2(Symbol cur_token, String falta){
-		System.out.println("Se esperaba el simbolo "+ falta+ " para el statement de la linea "+ (cur_token.left+1));
+		System.out.println("Se esperaba el simbolo "+ falta + " para el statement de la linea " + (cur_token.left+1));
 		erroresSintacticos2.add(new Visual_Error(cur_token.left+1, cur_token.right+1,"Se esperaba el simbolo "+ falta+ " para el statement de la linea "+ (cur_token.left+1) ));
 	}
 	public void quitar(){
@@ -50,22 +50,21 @@ terminal Double, Float, Select, Case, SelectCase, EndWhile, EndSelect, Potencia,
 //estos son los terminales que estoy utilizando
 terminal Igual, Suma, Resta, Mult, Div;
 terminal As, Dim, Main, ByRef, ByVal;
-terminal Char, Integer, String, Boolean, Entero, Type, Ch;
+terminal Char, Integer, String, Boolean, Entero, Type, Ch, str, com;
 terminal If, Do, While, For, Then, Step, To, Else, ElseIf, End, EndIf, EndFor, EndSub, EndFunction, EndType, Loop, Next, Exit, ExitFor;
 terminal Structs, Sub, Private, Print;
 terminal ParIzq, ParDer;
-terminal Menor, Mayor, Distinto, MenorIgual, MayorIgual, Menos, Mas, Por, Entre, Not, And, Or, Xor;
-terminal EndLine, Id, Concatenacion, Coma;
+terminal Menor, Mayor, Distinto, MenorIgual, MayorIgual, Not, And, Or, Xor;
+terminal EndLine, Id, Concatenacion, Coma, Call;
 terminal Asigna, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function, Return;
 
 /*-* Non-non terminal symbols **/
-non terminal  ini, decstm, decvar, listdec, tipo, functionstm, functionbody, listparam, parametros, mainstm;
-non terminal functionlist;
-//var_selec, dec_var, list_dec, statement, statement_list, function_stm; 
-//non terminal  if_stm, for_stm, return_stm, do_stm;
-//non terminal  value, operador_comp, expression, negacion_exp, and_exp, not_exp,comp_exp, add_exp, multi_exp;
-//non terminal  function_body, function_list, main_stm, parametro;
-//non terminal  sentencia, sent_list, else_list, else_stm, else_if_stm;
+non terminal  ini, decvarstm, decvar, listdec, tipo, decfunction, functionbody, listparam, parametros, mainstm;
+non terminal functionlist, expression, andexp, notexp, compexp, addexp, multiexp, negacionexp,value, operadorcomp;
+non terminal asignar, tipos, statementlist, statement, ifstm, elsestm, elselist, elseifstm, condicion, operando, iflist;
+non terminal forstm, dostm, function, variables, varasignacion, comentario, frase, fraselist;
+non terminal operador, operadorarit, operadorizq, operadorder, types, listdecvar, sfunction, ffunction, callfunction;
+
 
 /* precedence */
 //precedence left Igual;
@@ -74,25 +73,130 @@ precedence left Mult, Div;
 
 start with ini;
 
-ini ::= decstm
-       | decstm functionstm
-       | functionstm
+ini ::=  /*EndLine decvarstm
+       | decvarstm
+       | decvarstm decfunction
+       | decfunction
+       | decvarstm decfunction iflist forstm dostm
        | mainstm
        | functionlist mainstm functionlist
-       | decstm functionlist mainstm functionlist 
-       | ;
+       | decvarstm functionlist mainstm functionlist 
+       | iflist
+       | forstm
+       | dostm
+       | comentario
+       | fraselist
+       | operador
+       |types */
+       |statement;
  
 /*-*
  * GRAMMAR RULES
  */
-decstm             ::= Dim listdec EndLine
+functionbody ::=  statementlist;
+
+functionlist        ::=functionlist decfunction;
+
+function     ::=decfunction;
+
+types       ::= Type Id EndLine listdecvar EndType EndLine;
+
+decfunction           ::= sfunction functionbody EndSub EndLine
+                         |sfunction functionbody EndSub
+                         |ffunction
+                         |error;
+
+
+sfunction ::=Sub Id ParIzq ParDer EndLine 
+             |Sub Id ParIzq ParDer EndLine;
+
+ffunction ::=Function Id ParIzq listparam ParDer As tipo EndLine  functionbody EndFunction EndLine
+            |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction;
+
+callfunctionlist ::= callfunction
+                    |callfunctionlist callfunction;
+
+callfunction ::= Call sfuntion;
+
+decvarstm             ::=Dim listdec EndLine
                        |Dim listdec
-                       |Dim listdec EndLine decstm;
+                       |Dim listdec Asigna  Entero EndLine
+                       |Dim listdec Asigna Entero;
                        
-decvar             ::= Id As tipo;
+listdecvar            ::= decvar
+                         |decvar EndLine listdecvar|;
 
 listdec            ::= decvar
                        |listdec Coma decvar ;
+       
+//saber porque hace shift reduce cuando habilitamos statement
+statementlist           ::= statement
+                           |statement statementlist
+                           ;
+
+statement            ::= decvarstm
+      //                  |asignar
+                        |iflist
+                        |forstm
+                        |dostm
+                        |operador
+                        ;
+variables ::= decvar
+    //          |asignar
+              | error;
+
+
+decvar             ::= Id As tipo;
+
+//asignar             ::= Id Asigna tipos
+  //                      |Id error;
+
+
+
+//no estoy muy segura de esto
+//varasignacion ::= asigna expression;
+                  
+// falta agregarle las statement
+iflist              ::=ifstm statementlist elselist EndIf EndLine
+                       |ifstm statementlist elselist  EndIf;
+
+ifstm              ::= If condicion Then EndLine
+                       |If condicion Then;
+
+elselist           ::=  elsestm
+                       |elseifstm 
+                       |elseifstm elsestm
+                       | ;
+
+elsestm            ::= Else EndLine
+                      |Else;
+                      
+elseifstm          ::=  ElseIf condicion Then EndLine elseifstm
+                       |ElseIf condicion Then elseifstm
+                       |ElseIf condicion Then EndLine
+                       |ElseIf condicion Then;
+                      
+// falta agregarle el statement
+forstm  ::= For Id Asigna  Entero To Entero EndLine statementlist Next Id EndLine
+           |For Id Asigna  Entero To Entero EndLine statementlist Next Id;
+
+//falta agregarle las statement y expressiones
+dostm            ::= Do While  EndLine statementlist Loop EndLine
+                    |Do While  EndLine statementlist Loop
+                    |Do EndLine statementlist Loop While EndLine
+                    |Do EndLine statementlist Loop While;
+
+// falta agregarle las sentencia tambien 
+mainstm             ::= Sub Main ParIzq ParDer EndLine  functionbody EndSub EndLine
+                       |Sub Main ParIzq ParDer EndLine  functionbody EndSub;
+
+fraselist ::= frase
+             |fraselist frase GuionBajo EndLine
+             |fraselist frase;
+
+frase   ::= str Concatenacion; 
+
+
 
 tipo               ::= Char
                        |Integer
@@ -100,24 +204,50 @@ tipo               ::= Char
                        |Boolean;
 
 
-functionstm            ::= Sub Id ParIzq ParDer EndLine functionbody EndSub EndLine
-                          |Sub Id ParIzq ParDer EndLine functionbody EndSub
-                          |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction EndLine
-                          |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction;
-
-
-functionbody        ::=decstm;
-
-listparam           ::= listparam Coma parametros
+listparam           ::=  listparam Coma parametros
                         |parametros
                         | ;
 
 
-parametros          ::= ByRef decvar
-                        |ByVal decvar;
+parametros          ::=  ByRef decvar
+                        |ByVal decvar
+                        |decvar;
 
-mainstm             ::= Sub Main ParIzq ParDer EndLine  EndSub EndLine
-                       |Sub Main ParIzq ParDer EndLine  EndSub;
+tipos             ::=  Entero
+                       |TipoBoolean
+                       |Ch
+                       |str;
 
 
-functionlist        ::=functionlist functionstm;
+condicion       ::= operando operadorcomp operando;
+
+
+operando        ::= Id
+                   |Entero;
+
+operadorcomp          ::= Mayor
+                         |Menor
+                         |MayorIgual
+                         |MenorIgual
+                         |Distinto
+                         |Asigna;
+
+
+
+operador ::=  operadorizq operadorder EndLine;
+
+
+operadorizq   ::= operando Asigna;
+
+operadorder ::= operando operadorarit operando
+                |operadorder operadorarit operando
+                | error;
+
+
+operadorarit ::= Suma
+            |Resta
+            |Mult
+            |Div;
+
+
+comentario ::= com ;

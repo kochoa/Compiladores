@@ -6,6 +6,8 @@ import java.util.ArrayList;
 %%
 %unicode
 %class lexer
+%caseless
+%ignorecase
 %cup
 %int
 %column
@@ -60,6 +62,7 @@ type                    = Type
 string			= String 
 sub			= Sub 
 function                = Function
+call                    = Call
 main                    = Main 
 then 			= Then 
 to 			= To 
@@ -78,7 +81,7 @@ return                  = Return
 byref                   = ByRef
 byval                   = ByVal
 
-
+omitir                  = {space}+{guionbajo}{space}*{endline}
 letra			= [a-zA-Z]
 asigna                  = \= 
 tipobool 		= true | false 
@@ -100,10 +103,10 @@ comillas		= \"
 igcomillas		= \\{comillas}
 space 			= [ ] 
 tab			= \t 
-menos			= \- 
-mas			= \+ 
-por			= \* 
-entre			= \/ 
+resta			= \- 
+suma			= \+ 
+mult			= \* 
+div			= \/ 
 divientera		= \\ 
 parizq			= \( 
 parder			= \) 
@@ -120,6 +123,7 @@ comentario		= \'
 	{do}			{return symbol(sym.Do);}
 	{if}			{return symbol(sym.If);}
 	{function}		{return symbol(sym.Function);}
+        {call}		{return symbol(sym.Call);}
 	{endif}			{return symbol(sym.EndIf);}
 	{endwhile}		{return symbol(sym.EndWhile);}
 	{endfor}		{return symbol(sym.EndFor);}
@@ -187,24 +191,26 @@ comentario		= \'
 	{mayor}			{return symbol(sym.Mayor);}
 	{menorigual}    	{return symbol(sym.MenorIgual);}
 	{mayorigual}            {return symbol(sym.MayorIgual);}
-	{menos}			{return symbol(sym.Menos);}
-	{mas}			{return symbol(sym.Suma);}
-	{por}			{return symbol(sym.Mult);}
-	{entre}			{return symbol(sym.Div);}
+	{resta}			{return symbol(sym.Resta);}
+	{suma}			{return symbol(sym.Suma);}
+	{mult}			{return symbol(sym.Mult);}
+	{div}			{return symbol(sym.Div);}
 	{comentario}            {yybegin(com);}
 	{tab}			{}
+        {omitir}                {}
 	.                       {System.out.println("Errores lexicos:" + erroresLexicos.add(new Visual_Error( yyline +1 , yycolumn +1, "Caracter invalido en la linea " + (yyline +1) +", columna " + (yycolumn +1) + ". No se esperaba :" + yytext() )));}	
  //{System.out.println("Error Lexico. Fila: "+ (yyline+1) +" Columna: " + (yycolumn+1) );}
 }
 
 <str> {
-	{comillas}		{System.out.println("String: " + st);st="";yybegin(YYINITIAL);}
+	{comillas}		{System.out.println("String: " + st);st="";yybegin(YYINITIAL); return symbol(str);}
 	{igcomillas}	{st+="\"";}
-	.				{st+=yytext();}
+	{omitir}                {}
+        .				{st+=yytext();}
 }
 
 <com> {
 	{endline}		{System.out.println("Comentario");yybegin(YYINITIAL);}
-	{comentario}	{System.out.println("String");yybegin(YYINITIAL);}
-	.				{st+=yytext();}
+        {omitir}                {}
+        .				{st+=yytext();}
 }
