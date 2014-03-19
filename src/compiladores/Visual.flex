@@ -123,7 +123,7 @@ comentario		= \'
 	{do}			{return symbol(sym.Do);}
 	{if}			{return symbol(sym.If);}
 	{function}		{return symbol(sym.Function);}
-        {call}		{return symbol(sym.Call);}
+        {call}                  {return symbol(sym.Call);}
 	{endif}			{return symbol(sym.EndIf);}
 	{endwhile}		{return symbol(sym.EndWhile);}
 	{endfor}		{return symbol(sym.EndFor);}

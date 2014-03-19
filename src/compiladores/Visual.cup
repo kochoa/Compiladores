@@ -88,39 +88,35 @@ ini ::=  /*EndLine decvarstm
        | fraselist
        | operador
        |types */
-       |statement;
+       |functionlist;
  
 /*-*
  * GRAMMAR RULES
  */
 functionbody ::=  statementlist;
 
-functionlist        ::=functionlist decfunction;
-
-function     ::=decfunction;
+functionlist        ::=functionlist decfunction|mainstm;
 
 types       ::= Type Id EndLine listdecvar EndType EndLine;
 
-decfunction           ::= sfunction functionbody EndSub EndLine
-                         |sfunction functionbody EndSub
+decfunction           ::= Sub sfunction functionbody EndSub EndLine
+                         |Sub sfunction functionbody EndSub
                          |ffunction
-                         |error;
+                         |error{: erroresSintacticos2.add(new Visual_Error(0,0,"Se esperaba solo un metodo"));:};
 
 
-sfunction ::=Sub Id ParIzq ParDer EndLine 
-             |Sub Id ParIzq ParDer EndLine;
+sfunction ::= Id ParIzq ParDer EndLine 
+             ;
 
 ffunction ::=Function Id ParIzq listparam ParDer As tipo EndLine  functionbody EndFunction EndLine
             |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction;
 
-callfunctionlist ::= callfunction
-                    |callfunctionlist callfunction;
 
-callfunction ::= Call sfuntion;
+callfunction ::= Call sfunction;
 
 decvarstm             ::=Dim listdec EndLine
                        |Dim listdec
-                       |Dim listdec Asigna  Entero EndLine
+                       |Dim listdec Asigna Entero EndLine
                        |Dim listdec Asigna Entero;
                        
 listdecvar            ::= decvar
@@ -128,8 +124,7 @@ listdecvar            ::= decvar
 
 listdec            ::= decvar
                        |listdec Coma decvar ;
-       
-//saber porque hace shift reduce cuando habilitamos statement
+
 statementlist           ::= statement
                            |statement statementlist
                            ;
@@ -140,7 +135,7 @@ statement            ::= decvarstm
                         |forstm
                         |dostm
                         |operador
-                        ;
+                        |callfunction;
 variables ::= decvar
     //          |asignar
               | error;
