@@ -66,6 +66,7 @@ non terminal forstm, dostm, function, variables, varasignacion, comentario, fras
 non terminal operador, operadorarit, operadorizq, operadorder, types, listdecvar, sfunction, ffunction, callfunction;
 
 
+
 /* precedence */
 //precedence left Igual;
 precedence left Suma, Resta;
@@ -88,7 +89,8 @@ ini ::=  /*EndLine decvarstm
        | fraselist
        | operador
        |types */
-       |functionlist;
+       |functionlist
+       | expression;
  
 /*-*
  * GRAMMAR RULES
@@ -246,3 +248,38 @@ operadorarit ::= Suma
 
 
 comentario ::= com ;
+
+//ya
+expression           ::=andexp Or expression;
+
+
+//ya
+andexp             ::=notexp And andexp
+                       |notexp;
+//ya
+notexp             ::=Not compexp
+                       |compexp;
+
+//ya
+compexp            ::= addexp operadorcomp addexp;
+
+//ya
+addexp              ::= multiexp Suma addexp
+                         |multiexp Resta addexp;
+
+//ya
+multiexp            ::= negacionexp Mult multiexp
+                        |negacionexp Div multiexp;
+
+//ya
+negacionexp         ::= Resta value
+                        |value;
+
+
+//ya
+value                ::= ParIzq expression ParDer
+                         |Integer
+                         |String
+                         |Char
+                         |Boolean
+                         |Id;

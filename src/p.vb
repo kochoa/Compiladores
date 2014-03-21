@@ -20,7 +20,7 @@ If 2>3 Then
     Call hola()
   Loop
 End If
-End Sub
+end sub
 
 Function Hola() As Integer
 Dim a As String
