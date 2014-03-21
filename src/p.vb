@@ -26,4 +26,3 @@ Function Hola() As Integer
 Dim a As String,a As Boolean,b As Char
 Dim s As Integer = 5147523
 End Function
-
