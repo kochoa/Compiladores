@@ -52,7 +52,7 @@ terminal Igual, Suma, Resta, Mult, Div;
 terminal As, Dim, Main, ByRef, ByVal;
 terminal Char, Integer, String, Boolean, Entero, Type, Ch, str, com;
 terminal If, Do, While, For, Then, Step, To, Else, ElseIf, End, EndIf, EndFor, EndSub, EndFunction, EndType, Loop, Next, Exit, ExitFor;
-terminal Structs, Sub, Private, Print;
+terminal Structs, Sub, Private, Print, Punto;
 terminal ParIzq, ParDer;
 terminal Menor, Mayor, Distinto, MenorIgual, MayorIgual, Not, And, Or, Xor;
 terminal EndLine, Id, Concatenacion, Coma, Call;
@@ -62,14 +62,15 @@ terminal Asigna, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function, Return;
 non terminal  ini, decvarstm, decvar, listdec, tipo, decfunction, functionbody, listparam, parametros, mainstm;
 non terminal functionlist, expression, andexp, notexp, compexp, addexp, multiexp, negacionexp,value, operadorcomp;
 non terminal asignar, tipos, statementlist, statement, ifstm, elsestm, elselist, elseifstm, condicion, operando, iflist;
-non terminal forstm, dostm, function, variables, varasignacion, comentario, frase, fraselist;
-non terminal operador, operadorarit, operadorizq, operadorder, types, listdecvar, sfunction, ffunction, callfunction;
+non terminal forstm, dostm, function, variables, varasignacion, comentario, frase, fraselist,exp,expMat,endtypes,tipotype,final;
+non terminal operador, operadorarit, operadorizq, operadorder, types, listdecvar, sfunction, ffunction, callfunction, expLog,decvarlist,dectype;
 
 
 /* precedence */
 //precedence left Igual;
 precedence left Suma, Resta;
 precedence left Mult, Div;
+precedence left Potencia;
 
 start with ini;
 
@@ -97,30 +98,33 @@ functionbody ::=  statementlist;
 
 functionlist        ::=functionlist decfunction|mainstm;
 
-types       ::= Type Id EndLine listdecvar EndType EndLine;
+types       ::= Type Id EndLine endtypes;
 
-decfunction           ::= Sub sfunction functionbody EndSub EndLine
-                         |Sub sfunction functionbody EndSub
+endtypes    ::= decvarlist EndType EndLine
+                |decvarlist EndType;
+
+decfunction           ::= Sub sfunction functionbody EndSub final
                          |ffunction
-                         |error{: erroresSintacticos2.add(new Visual_Error(0,0,"Se esperaba solo un metodo"));:};
+                         |types
+                         |error:err{: erroresSintacticos2.add(new Visual_Error(0,0,"probando en la fila"+errleft+"en la columna" +errright));:};
 
 
-sfunction ::= Id ParIzq ParDer EndLine 
+sfunction ::= Id ParIzq listparam ParDer EndLine
              ;
 
 ffunction ::=Function Id ParIzq listparam ParDer As tipo EndLine  functionbody EndFunction EndLine
             |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction;
 
 
-callfunction ::= Call sfunction;
+callfunction ::= Call sfunction|sfunction;
 
-decvarstm             ::=Dim listdec EndLine
-                       |Dim listdec
-                       |Dim listdec Asigna Entero EndLine
-                       |Dim listdec Asigna Entero;
-                       
-listdecvar            ::= decvar
-                         |decvar EndLine listdecvar|;
+decvarstm             ::=Dim listdec final
+                       |Dim listdec Asigna Entero final;
+
+decvarlist          ::= dectype EndLine decvarlist|;
+
+dectype             ::= Id As tipo
+                    |Id As Id;
 
 listdec            ::= decvar
                        |listdec Coma decvar ;
@@ -134,12 +138,15 @@ statement            ::= decvarstm
                         |iflist
                         |forstm
                         |dostm
-                        |operador
+                        |tipotype
+//                        |operador
+                        |expMat
                         |callfunction;
 variables ::= decvar
     //          |asignar
               | error;
 
+tipotype    ::= Id Punto Id EndLine;
 
 decvar             ::= Id As tipo;
 
@@ -152,46 +159,30 @@ decvar             ::= Id As tipo;
 //varasignacion ::= asigna expression;
                   
 // falta agregarle las statement
-iflist              ::=ifstm statementlist elselist EndIf EndLine
-                       |ifstm statementlist elselist  EndIf;
+iflist              ::=ifstm statementlist elselist EndIf final;
 
-ifstm              ::= If condicion Then EndLine
-                       |If condicion Then;
+ifstm              ::= If expLog Then final;
 
 elselist           ::=  elsestm
                        |elseifstm 
-                       |elseifstm elsestm
                        | ;
 
-elsestm            ::= Else EndLine
-                      |Else;
+elsestm            ::= Else final;
                       
-elseifstm          ::=  ElseIf condicion Then EndLine elseifstm
-                       |ElseIf condicion Then elseifstm
-                       |ElseIf condicion Then EndLine
-                       |ElseIf condicion Then;
+elseifstm          ::=  ElseIf expLog statementlist Then EndLine elseifstm
+                       |ElseIf expLog statementlist Then final;
                       
 // falta agregarle el statement
-forstm  ::= For Id Asigna  Entero To Entero EndLine statementlist Next Id EndLine
-           |For Id Asigna  Entero To Entero EndLine statementlist Next Id;
+forstm  ::= For Id Asigna  Entero To Entero EndLine statementlist Next Id final;
 
 //falta agregarle las statement y expressiones
-dostm            ::= Do While  EndLine statementlist Loop EndLine
-                    |Do While  EndLine statementlist Loop
-                    |Do EndLine statementlist Loop While EndLine
-                    |Do EndLine statementlist Loop While;
+dostm            ::= Do While expLog EndLine statementlist Loop final
+                    |Do expLog EndLine statementlist Loop While final;
+
+final   ::= EndLine|;
 
 // falta agregarle las sentencia tambien 
-mainstm             ::= Sub Main ParIzq ParDer EndLine  functionbody EndSub EndLine
-                       |Sub Main ParIzq ParDer EndLine  functionbody EndSub;
-
-fraselist ::= frase
-             |fraselist frase GuionBajo EndLine
-             |fraselist frase;
-
-frase   ::= str Concatenacion; 
-
-
+mainstm             ::= Sub Main ParIzq ParDer EndLine  functionbody EndSub final;
 
 tipo               ::= Char
                        |Integer
@@ -204,8 +195,7 @@ listparam           ::=  listparam Coma parametros
                         | ;
 
 
-parametros          ::=  ByRef decvar
-                        |ByVal decvar
+parametros          ::= ByVal decvar
                         |decvar;
 
 tipos             ::=  Entero
@@ -218,7 +208,7 @@ condicion       ::= operando operadorcomp operando;
 
 
 operando        ::= Id
-                   |Entero;
+                   |tipos;
 
 operadorcomp          ::= Mayor
                          |Menor
@@ -227,8 +217,31 @@ operadorcomp          ::= Mayor
                          |Distinto
                          |Asigna;
 
+expLog     ::= condicion
+            |Not ParIzq expLog ParDer
+            |Not ParIzq expLog ParDer Or expLog
+            |Not ParIzq expLog ParDer Xor expLog
+            |Not ParIzq expLog ParDer And expLog
+            |condicion Or expLog
+            |condicion Xor expLog
+            |condicion And expLog
+            |ParIzq expLog ParDer
+            |ParIzq expLog ParDer Or expLog
+            |ParIzq expLog ParDer Xor expLog
+            |ParIzq expLog ParDer And expLog
+            |error:err{: erroresSintacticos2.add(new Visual_Error(0,0,"se Esperaba una condicion en la fila"+errleft+"en la columna" +errright));:} ;
 
+expMat  ::= Id Asigna exp EndLine;
 
+exp     ::= Entero
+            |Id
+            |Id ParIzq listparam ParDer
+            |exp Suma exp
+            |exp Resta exp
+            |exp Mult exp
+            |exp Div exp
+            |exp Potencia exp
+            |ParIzq exp ParDer;
 operador ::=  operadorizq operadorder EndLine;
 
 
@@ -236,7 +249,7 @@ operadorizq   ::= operando Asigna;
 
 operadorder ::= operando operadorarit operando
                 |operadorder operadorarit operando
-                | error;
+                |error;
 
 
 operadorarit ::= Suma

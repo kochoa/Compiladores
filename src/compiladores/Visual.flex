@@ -113,7 +113,7 @@ parder			= \)
 guionbajo		= \_ 
 llavesder		= \{ 
 llavesizq		= \} 
-
+punto                   = \.
 comentario		= \' 
 
 %%
@@ -168,7 +168,7 @@ comentario		= \'
         {return}                {return symbol(sym.Return);}
         {byref}                 {return symbol(sym.ByRef);}
         {byval}                 {return symbol(sym.ByVal);}
-        {dospuntos}		{return symbol(sym.DosPuntos);}
+        {dospuntos}		{return symbol(sym.EndLine);}
 	{coma}			{return symbol(sym.Coma);}
 	{concatenacion}         {return symbol(sym.Concatenacion);}
 	{divientera}            {return symbol(sym.DiviEntera);}
@@ -198,12 +198,13 @@ comentario		= \'
 	{comentario}            {yybegin(com);}
 	{tab}			{}
         {omitir}                {}
+        {punto}                 {return symbol(sym.Punto);}
 	.                       {System.out.println("Errores lexicos:" + erroresLexicos.add(new Visual_Error( yyline +1 , yycolumn +1, "Caracter invalido en la linea " + (yyline +1) +", columna " + (yycolumn +1) + ". No se esperaba :" + yytext() )));}	
  //{System.out.println("Error Lexico. Fila: "+ (yyline+1) +" Columna: " + (yycolumn+1) );}
 }
 
 <str> {
-	{comillas}		{System.out.println("String: " + st);st="";yybegin(YYINITIAL); return symbol(str);}
+	{comillas}		{System.out.println("String: " + st);st="";yybegin(YYINITIAL); return symbol(sym.str);}
 	{igcomillas}	{st+="\"";}
 	{omitir}                {}
         .				{st+=yytext();}

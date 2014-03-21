@@ -17,12 +17,13 @@ If 2>3 Then
   Do While
     Dim a AS Char
     Call hola()
-    Call hola()
+    Call hoa()
   Loop
 End If
 End Sub
 
 Function Hola() As Integer
-Dim a As String
+Dim a As String,a As Boolean,b As Char
+Dim s As Integer = 5147523
 End Function
 

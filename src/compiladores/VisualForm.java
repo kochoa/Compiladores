@@ -231,7 +231,7 @@ try {
 
     private void jbtncompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncompilarActionPerformed
         // TODO add your handling code here:
-         this.jbtnguardarActionPerformed(evt);
+         //this.jbtnguardarActionPerformed(evt);
          Analizador p =  null;
         lexer l = null;
         String errores = "";
