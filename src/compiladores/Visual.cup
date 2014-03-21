@@ -278,8 +278,5 @@ negacionexp         ::= Resta value
 
 //ya
 value                ::= ParIzq expression ParDer
-                         |Integer
-                         |String
-                         |Char
-                         |Boolean
+                         |tipo
                          |Id;
