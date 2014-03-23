@@ -11,10 +11,10 @@ scan with {: return super.getScanner().next_token(); :};
 
 parser code{:
     ArrayList<Visual_Error> erroresSintacticos = new ArrayList<Visual_Error>();
-   
-      	public void report_error(Symbol cur_token) {
+   @Override
+      	public void syntax_error(Symbol cur_token) {
         System.out.println("La Cadena: " + cur_token.value +" en la Linea: " + (cur_token.left+1) +", Columna: "+(cur_token.right+1)+ " esta fuera de contexto.");
-        report_error("Syntax error at line " + (cur_token.left+1) +", column " + (cur_token.right+1), null);
+        report_error("Syntax error con:"+ cur_token.value + " en la linea: " + (cur_token.left+1) +", columna: " + (cur_token.right+1),null);
         erroresSintacticos.add(new Visual_Error(cur_token.left + 1, cur_token.right + 1,"La Cadena: " + cur_token.value +" en la Linea: " + (cur_token.left+1) +", Columna: "+(cur_token.right+1)+ " esta fuera de contexto.") );
     }
 
@@ -40,30 +40,31 @@ action code {:
 	public void quitar(){
 		erroresSintacticos2.remove(erroresSintacticos2.size());
 	}
+
 :};
 
 
 /*-* terminal symbols */
 //estos son los que no estoy utilizando
-terminal Double, Float, Select, Case, SelectCase, EndWhile, EndSelect, Potencia, DiviEntera, Eqv, Imp, DosPuntos;
+terminal Potencia, DosPuntos;
 
 //estos son los terminales que estoy utilizando
-terminal Igual, Suma, Resta, Mult, Div;
-terminal As, Dim, Main, ByRef, ByVal;
-terminal Char, Integer, String, Boolean, Entero, Type, Ch, str, com;
-terminal If, Do, While, For, Then, Step, To, Else, ElseIf, End, EndIf, EndFor, EndSub, EndFunction, EndType, Loop, Next, Exit, ExitFor;
-terminal Structs, Sub, Private, Print, Punto;
-terminal ParIzq, ParDer;
+terminal Suma, Resta, Mult, Div,Return,Structs,EndFor,ExitFor,Private, EndWhile, EndSelect, EndCase;
+terminal As, Dim, Main, ByVal,ByRef,Float,Double,Select,Concatenacion, DiviEntera, GuionBajo, Eqv, Imp, Step,Exit,Case;
+terminal Char, Integer, String, Boolean, Entero, Type, Ch, str, com,SelectCase;
+terminal If, Do, While, For, Then, To, Else, ElseIf, End, EndIf, EndSub, EndFunction, EndType, Loop, Next;
+terminal Sub, Print, Punto, LlaveDer, LlaveIzq;
+terminal ParIzq, ParDer, Input;
 terminal Menor, Mayor, Distinto, MenorIgual, MayorIgual, Not, And, Or, Xor;
-terminal EndLine, Id, Concatenacion, Coma, Call;
-terminal Asigna, LlaveDer,  LlaveIzq, GuionBajo, TipoBoolean, Function, Return;
+terminal EndLine, Id, Coma, Call;
+terminal Asigna, TipoBoolean, Function;
 
 /*-* Non-non terminal symbols **/
 non terminal  ini, decvarstm, decvar, listdec, tipo, decfunction, functionbody, listparam, parametros, mainstm;
-non terminal functionlist, expression, andexp, notexp, compexp, addexp, multiexp, negacionexp,value, operadorcomp;
-non terminal asignar, tipos, statementlist, statement, ifstm, elsestm, elselist, elseifstm, condicion, operando, iflist;
-non terminal forstm, dostm, function, variables, varasignacion, comentario, frase, fraselist,exp,expMat,endtypes,tipotype,final;
-non terminal operador, operadorarit, operadorizq, operadorder, types, listdecvar, sfunction, ffunction, callfunction, expLog,decvarlist,dectype;
+non terminal functionlist, operadorcomp, escribir, leer, impre, ret;
+non terminal tipos, statementlist, statement, ifstm, elsestm, elselist, elseifstm, condicion, operando, iflist;
+non terminal forstm, dostm, exp, expMat, endtypes, tipotype, final, dec;
+non terminal types, sfunction, ffunction, callfunction, expLog,decvarlist,dectype;
 
 
 
@@ -90,15 +91,20 @@ ini ::=  /*EndLine decvarstm
        | fraselist
        | operador
        |types */
-       |functionlist
-       | expression;
+       |dec functionlist mainstm
+       |dec functionlist error:err{: erroresSintacticos2.add(new Visual_Error(errleft+1,errright+1,"Se Esperaba un Main en la Fila: " + errleft));:}
+       |dec mainstm functionlist
+       |dec functionlist mainstm functionlist
+       |dec functionlist error:err functionlist{: erroresSintacticos2.add(new Visual_Error(errleft+1,errright+1,"Se Esperaba un Main"));:}
+       |dec mainstm
+       |error;
  
 /*-*
  * GRAMMAR RULES
  */
 functionbody ::=  statementlist;
 
-functionlist        ::=functionlist decfunction|mainstm;
+functionlist        ::=functionlist decfunction|decfunction;
 
 types       ::= Type Id EndLine endtypes;
 
@@ -108,20 +114,25 @@ endtypes    ::= decvarlist EndType EndLine
 decfunction           ::= Sub sfunction functionbody EndSub final
                          |ffunction
                          |types
-                         |error:err{: erroresSintacticos2.add(new Visual_Error(0,0,"probando en la fila"+errleft+"en la columna" +errright));:};
+                         ;
 
+escribir    ::= Print impre final;
+impre       ::= Id|Id ParIzq listparam ParDer|str|Ch;
 
+leer        ::= Input ParIzq Id ParDer final;
 sfunction ::= Id ParIzq listparam ParDer EndLine
              ;
 
-ffunction ::=Function Id ParIzq listparam ParDer As tipo EndLine  functionbody EndFunction EndLine
-            |Function Id ParIzq listparam ParDer As tipo EndLine functionbody  EndFunction;
+ffunction ::=Function Id ParIzq listparam ParDer As tipo EndLine functionbody ret EndFunction final;
 
+ret     ::= Return operando final| Return Id ParIzq listparam ParDer final|;
 
 callfunction ::= Call sfunction|sfunction;
 
-decvarstm             ::=Dim listdec final
-                       |Dim listdec Asigna Entero final;
+decvarstm             ::= Dim error:er{:erroresSintacticos2.add(new Visual_Error(erleft,erright,"Token no esperado: Dim"));:}
+                       |Dim listdec final
+                       |Dim listdec Asigna Entero final
+                       ;
 
 decvarlist          ::= dectype EndLine decvarlist|;
 
@@ -135,30 +146,21 @@ statementlist           ::= statement
                            |statement statementlist
                            ;
 
+dec             ::= decvarstm dec|;
+
 statement            ::= decvarstm
-      //                  |asignar
                         |iflist
                         |forstm
                         |dostm
                         |tipotype
-//                        |operador
+                        |escribir
+                        |leer
                         |expMat
                         |callfunction;
-variables ::= decvar
-    //          |asignar
-              | error;
 
-tipotype    ::= Id Punto Id EndLine;
+tipotype    ::= Id Punto Id final;
 
 decvar             ::= Id As tipo;
-
-//asignar             ::= Id Asigna tipos
-  //                      |Id error;
-
-
-
-//no estoy muy segura de esto
-//varasignacion ::= asigna expression;
                   
 // falta agregarle las statement
 iflist              ::=ifstm statementlist elselist EndIf final;
@@ -169,22 +171,21 @@ elselist           ::=  elsestm
                        |elseifstm 
                        | ;
 
-elsestm            ::= Else final;
+elsestm            ::= Else final statementlist ;
                       
-elseifstm          ::=  ElseIf expLog statementlist Then EndLine elseifstm
-                       |ElseIf expLog statementlist Then final;
+elseifstm          ::=  ElseIf expLog Then final statementlist elselist ;
                       
 // falta agregarle el statement
-forstm  ::= For Id Asigna  Entero To Entero EndLine statementlist Next Id final;
+forstm  ::= For Id Asigna  Entero To Entero final statementlist Next Id final;
 
 //falta agregarle las statement y expressiones
-dostm            ::= Do While expLog EndLine statementlist Loop final
-                    |Do expLog EndLine statementlist Loop While final;
+dostm            ::= Do While expLog final statementlist Loop final
+                    |Do expLog final statementlist Loop While final;
 
 final   ::= EndLine|;
 
 // falta agregarle las sentencia tambien 
-mainstm             ::= Sub Main ParIzq ParDer EndLine  functionbody EndSub final;
+mainstm             ::= Sub Main ParIzq ParDer final  functionbody EndSub final;
 
 tipo               ::= Char
                        |Integer
@@ -198,7 +199,10 @@ listparam           ::=  listparam Coma parametros
 
 
 parametros          ::= ByVal decvar
-                        |decvar;
+                        |ByRef decvar
+                        |decvar
+                        |operando
+                        |Id ParIzq listparam ParDer;
 
 tipos             ::=  Entero
                        |TipoBoolean
@@ -233,7 +237,9 @@ expLog     ::= condicion
             |ParIzq expLog ParDer And expLog
             |error:err{: erroresSintacticos2.add(new Visual_Error(0,0,"se Esperaba una condicion en la fila"+errleft+"en la columna" +errright));:} ;
 
-expMat  ::= Id Asigna exp EndLine;
+expMat  ::= Id Asigna exp final
+            |Id Asigna TipoBoolean final
+            |Id Asigna str final;
 
 exp     ::= Entero
             |Id
@@ -244,52 +250,3 @@ exp     ::= Entero
             |exp Div exp
             |exp Potencia exp
             |ParIzq exp ParDer;
-operador ::=  operadorizq operadorder EndLine;
-
-
-operadorizq   ::= operando Asigna;
-
-operadorder ::= operando operadorarit operando
-                |operadorder operadorarit operando
-                |error;
-
-
-operadorarit ::= Suma
-            |Resta
-            |Mult
-            |Div;
-
-
-comentario ::= com ;
-
-//ya
-expression           ::=andexp Or expression;
-
-
-//ya
-andexp             ::=notexp And andexp
-                       |notexp;
-//ya
-notexp             ::=Not compexp
-                       |compexp;
-
-//ya
-compexp            ::= addexp operadorcomp addexp;
-
-//ya
-addexp              ::= multiexp Suma addexp
-                         |multiexp Resta addexp;
-
-//ya
-multiexp            ::= negacionexp Mult multiexp
-                        |negacionexp Div multiexp;
-
-//ya
-negacionexp         ::= Resta value
-                        |value;
-
-
-//ya
-value                ::= ParIzq expression ParDer
-                         |tipo
-                         |Id;

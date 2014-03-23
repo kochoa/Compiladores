@@ -80,6 +80,7 @@ exit                    = Exit
 return                  = Return
 byref                   = ByRef
 byval                   = ByVal
+read                    = Input
 
 omitir                  = {space}+{guionbajo}{space}*{endline}
 letra			= [a-zA-Z]
@@ -98,7 +99,7 @@ distinto 		= <\>
 potencia	 	= \^ 
 menorigual		= <\= 
 mayorigual		= >\= 
-concatenacion   	= \& 
+concatenacion   	= \&
 comillas		= \" 
 igcomillas		= \\{comillas}
 space 			= [ ] 
@@ -119,6 +120,7 @@ comentario		= \'
 %%
 
 <YYINITIAL>{
+        {read}                  {return symbol(sym.Input);}
 	{dim}			{return symbol(sym.Dim);}
 	{do}			{return symbol(sym.Do);}
 	{if}			{return symbol(sym.If);}
@@ -170,7 +172,7 @@ comentario		= \'
         {byval}                 {return symbol(sym.ByVal);}
         {dospuntos}		{return symbol(sym.EndLine);}
 	{coma}			{return symbol(sym.Coma);}
-	{concatenacion}         {return symbol(sym.Concatenacion);}
+	{concatenacion}         {}
 	{divientera}            {return symbol(sym.DiviEntera);}
 	{potencia}		{return symbol(sym.Potencia);}
 	{distinto}		{return symbol(sym.Distinto);}	
@@ -205,7 +207,7 @@ comentario		= \'
 
 <str> {
 	{comillas}		{System.out.println("String: " + st);st="";yybegin(YYINITIAL); return symbol(sym.str);}
-	{igcomillas}	{st+="\"";}
+	{igcomillas}            {st+="\"";}
 	{omitir}                {}
         .				{st+=yytext();}
 }
